@@ -1,6 +1,7 @@
 package lovstad.dk.picturestack;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,52 +16,56 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
-public class Intro_akt extends AppCompatActivity {
-    public ImageView testbillede;
-    public TextView testtext;
+public class Intro_akt extends AppCompatActivity implements View.OnClickListener {
+    public static ImageView testbillede;
+    public static TextView testtext;
+    public static ArrayList<String> billeder;
+    public int billedcount = 0;
+    public Bitmap placeholder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         testbillede = (ImageView) findViewById(R.id.testbillede);
         testtext = (TextView) findViewById(R.id.testtext);
+
+        if (placeholder == null) {
+            placeholder = BitmapFactory.decodeFile("loadingplaceholder.png");
+
+        }
+        testbillede.setImageBitmap(placeholder);
+
+
         Log.d("AsyncTask", "Asynctask starter om lidt...");
-        testtext.setText("Etellerandet");
-        AsyncTask asyncTask = new AsyncTask() {
-            String ting;
-            @Override
-            protected Object doInBackground(Object[] params) {
-
-                try {
-                    Log.d("AsyncTask", "Asynctask er startet.");
-                    URL url = new URL("http://rasmuslovstad.dk/");
-                    BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-                    ting = br.readLine();
-                } catch (MalformedURLException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
-                return ting;
-            }
+        testtext.setText("Loader...");
+        new Downloader().execute();
+        testbillede.setOnClickListener(this);
 
 
-            @Override
-            protected void onPostExecute(Object resultat) {
-                Log.d("AsyncTask", "OnPostExecute er startet. Resultatet er "+resultat);
-                testtext.setText(resultat.toString());
-            }
 
-        };
-        asyncTask.execute();
-        protected String hentData() {
-        return null;
     }
+    protected static void setData(ArrayList<String> data) {
+        billeder = data;
+        testtext.setText("Billeder:");
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        testbillede.setImageBitmap(Base64crypter.decode(billeder.get(billedcount)));
+        placeholder = Base64crypter.decode(billeder.get(billedcount));
+        billedcount++;
+        if (billedcount == billeder.size()) {
+            billedcount = 0;
+        }
+
     }
 }
