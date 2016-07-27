@@ -9,12 +9,13 @@
 
 
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="360dp"
+        android:layout_height="640dp"
         android:id="@+id/testbillede"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/testtext" />
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/view"
+        android:layout_below="@+id/testtext"
+        android:layout_alignParentStart="false" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,4 +28,17 @@
         android:visibility="visible"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_height="200dp"
+        android:layout_width="200dp"
+
+        android:background="#a0aeff"
+        android:clickable="true"
+        android:id="@+id/view"
+        android:src="@android:drawable/ic_menu_camera"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp" />
 </RelativeLayout>
